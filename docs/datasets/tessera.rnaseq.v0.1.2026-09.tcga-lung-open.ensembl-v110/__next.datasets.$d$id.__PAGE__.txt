@@ -1,6 +1,6 @@
 1:"$Sreact.fragment"
-2:I[32945,["/Demo2ReadyOmics/_next/static/chunks/9002d94f03357a25.js","/Demo2ReadyOmics/_next/static/chunks/9c7858740a55b8cd.js","/Demo2ReadyOmics/_next/static/chunks/31e5fb4b08b169a3.js","/Demo2ReadyOmics/_next/static/chunks/e186a7cfc7843229.js"],"DatasetDetailClient"]
-3:I[97367,["/Demo2ReadyOmics/_next/static/chunks/ff1a16fafef87110.js","/Demo2ReadyOmics/_next/static/chunks/d2be314c3ece3fbe.js"],"OutletBoundary"]
+2:I[32945,["/Demo2ReadyOmics/_next/static/chunks/9002d94f03357a25.js","/Demo2ReadyOmics/_next/static/chunks/9c7858740a55b8cd.js","/Demo2ReadyOmics/_next/static/chunks/ab01f956e2044fd7.js","/Demo2ReadyOmics/_next/static/chunks/3faa5879877f6b10.js"],"DatasetDetailClient"]
+3:I[97367,["/Demo2ReadyOmics/_next/static/chunks/2f236954d6a65e12.js"],"OutletBoundary"]
 4:"$Sreact.suspense"
-0:{"buildId":"V5zxiL3WQb-I5mZaayZDM","rsc":["$","$1","c",{"children":[["$","$L2",null,{"datasetId":"tessera.rnaseq.v0.1.2026-09.tcga-lung-open.ensembl-v110"}],[["$","script","script-0",{"src":"/Demo2ReadyOmics/_next/static/chunks/31e5fb4b08b169a3.js","async":true}],["$","script","script-1",{"src":"/Demo2ReadyOmics/_next/static/chunks/e186a7cfc7843229.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"loading":null,"isPartial":false}
+0:{"buildId":"tvtsG9yCV389GxJ4qCYfL","rsc":["$","$1","c",{"children":[["$","$L2",null,{"datasetId":"tessera.rnaseq.v0.1.2026-09.tcga-lung-open.ensembl-v110"}],[["$","script","script-0",{"src":"/Demo2ReadyOmics/_next/static/chunks/ab01f956e2044fd7.js","async":true}],["$","script","script-1",{"src":"/Demo2ReadyOmics/_next/static/chunks/3faa5879877f6b10.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"loading":null,"isPartial":false}
 5:null
