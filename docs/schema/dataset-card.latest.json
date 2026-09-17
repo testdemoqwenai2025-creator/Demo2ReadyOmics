@@ -1,0 +1,207 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tessera.bio/schema/dataset-card.v0.1.json",
+  "title": "Tessera Bio Dataset Card v0.1",
+  "description": "Machine-readable metadata accompanying every ML-ready Tessera Bio dataset. This schema is versioned; downstream users should pin to a specific version and validate against it.",
+  "type": "object",
+  "required": [
+    "dataset_id",
+    "dataset_version",
+    "release_date",
+    "producer",
+    "licence",
+    "cohort_definition",
+    "reference_versions",
+    "pipeline",
+    "inputs",
+    "quality",
+    "batch_effects",
+    "splits",
+    "normalisation",
+    "known_biases",
+    "suggested_uses",
+    "discouraged_uses",
+    "identifier_drift_report",
+    "provenance"
+  ],
+  "properties": {
+    "dataset_id": {
+      "type": "string",
+      "description": "Globally unique identifier, namespaced: tessera.<assay>.<version>.<cohort>.<reference>",
+      "pattern": "^tessera\\."
+    },
+    "dataset_version": {
+      "type": "string",
+      "description": "Semantic version of this dataset",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "release_date": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO 8601 date"
+    },
+    "producer": {
+      "type": "string",
+      "description": "Producer organisation"
+    },
+    "licence": {
+      "type": "string",
+      "description": "Licence under which this dataset is released"
+    },
+    "cohort_definition": {
+      "type": "object",
+      "required": ["n_samples", "n_donors", "species", "tissue", "disease_focus", "selection_criteria"],
+      "properties": {
+        "n_samples": { "type": "integer", "minimum": 0 },
+        "n_donors": { "type": "integer", "minimum": 0 },
+        "species": { "type": "string" },
+        "tissue": { "type": "array", "items": { "type": "string" } },
+        "disease_focus": { "type": "string" },
+        "selection_criteria": { "type": "string" }
+      }
+    },
+    "reference_versions": {
+      "type": "object",
+      "required": ["ensembl_release", "ensembl_assembly", "uniprot_release", "gene_id_type", "transcript_id_type"],
+      "properties": {
+        "ensembl_release": { "type": "integer" },
+        "ensembl_assembly": { "type": "string" },
+        "uniprot_release": { "type": "string" },
+        "gene_id_type": { "type": "string" },
+        "transcript_id_type": { "type": "string" }
+      }
+    },
+    "pipeline": {
+      "type": "object",
+      "required": ["pipeline_name", "pipeline_version", "pipeline_url", "container_hash", "pipeline_commit", "workflow_lang", "tools"],
+      "properties": {
+        "pipeline_name": { "type": "string" },
+        "pipeline_version": { "type": "string" },
+        "pipeline_url": { "type": "string" },
+        "container_hash": { "type": "string" },
+        "pipeline_commit": { "type": "string" },
+        "workflow_lang": { "type": "string" },
+        "tools": { "type": "object", "additionalProperties": { "type": "string" } }
+      }
+    },
+    "inputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source_id", "source_url", "source_licence", "n_samples_taken", "submitters_acknowledgement"],
+        "properties": {
+          "source_id": { "type": "string" },
+          "source_url": { "type": "string", "format": "uri" },
+          "source_licence": { "type": "string" },
+          "n_samples_taken": { "type": "integer", "minimum": 0 },
+          "submitters_acknowledgement": { "type": "string" }
+        }
+      }
+    },
+    "quality": {
+      "type": "object",
+      "required": ["median_reads_per_sample", "median_mapping_rate", "median_duplication", "median_3_prime_bias", "failed_qc_samples", "qc_threshold"],
+      "properties": {
+        "median_reads_per_sample": { "type": "integer" },
+        "median_mapping_rate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "median_duplication": { "type": "number", "minimum": 0, "maximum": 1 },
+        "median_3_prime_bias": { "type": "number", "minimum": 0, "maximum": 1 },
+        "failed_qc_samples": { "type": "array", "items": { "type": "string" } },
+        "qc_threshold": { "type": "string" }
+      }
+    },
+    "batch_effects": {
+      "type": "object",
+      "required": ["detected", "correction_method", "before_correction_pca_explained_by_batch", "after_correction_pca_explained_by_batch"],
+      "properties": {
+        "detected": { "type": "boolean" },
+        "correction_method": { "type": "string" },
+        "before_correction_pca_explained_by_batch": { "type": "number" },
+        "after_correction_pca_explained_by_batch": { "type": "number" }
+      }
+    },
+    "splits": {
+      "type": "object",
+      "required": ["split_strategy", "train", "validation", "test", "leakage_controls"],
+      "properties": {
+        "split_strategy": { "type": "string" },
+        "train": {
+          "type": "object",
+          "required": ["n_samples", "cohort_ids"],
+          "properties": {
+            "n_samples": { "type": "integer" },
+            "cohort_ids": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "validation": {
+          "type": "object",
+          "required": ["n_samples", "cohort_ids"],
+          "properties": {
+            "n_samples": { "type": "integer" },
+            "cohort_ids": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "test": {
+          "type": "object",
+          "required": ["n_samples", "cohort_ids"],
+          "properties": {
+            "n_samples": { "type": "integer" },
+            "cohort_ids": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "leakage_controls": {
+          "type": "object",
+          "required": ["donor_overlap_check", "family_overlap_check"],
+          "properties": {
+            "donor_overlap_check": { "type": "string" },
+            "family_overlap_check": { "type": "string" }
+          }
+        }
+      }
+    },
+    "normalisation": {
+      "type": "object",
+      "required": ["method", "reference_distribution", "apply_to_test"],
+      "properties": {
+        "method": { "type": "string" },
+        "reference_distribution": { "type": "string" },
+        "apply_to_test": { "type": "string" }
+      }
+    },
+    "known_biases": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "suggested_uses": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "discouraged_uses": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "identifier_drift_report": {
+      "type": "object",
+      "required": ["compared_to_ensembl_release", "genes_added", "genes_removed", "genes_merged", "genes_split", "impact_on_dataset"],
+      "properties": {
+        "compared_to_ensembl_release": { "type": "integer" },
+        "genes_added": { "type": "integer" },
+        "genes_removed": { "type": "integer" },
+        "genes_merged": { "type": "integer" },
+        "genes_split": { "type": "integer" },
+        "impact_on_dataset": { "type": "string" }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["output_matrix_sha256", "dataset_card_sha256", "signed_by"],
+      "properties": {
+        "output_matrix_sha256": { "type": "string" },
+        "dataset_card_sha256": { "type": "string" },
+        "signed_by": { "type": "string" }
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$comment": "Schema version 0.1. Future versions (0.2+) may add optional fields but will not remove or rename existing required fields. Downstream users should pin to this schema version and validate against it."
+}
