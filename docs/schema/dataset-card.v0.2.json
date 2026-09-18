@@ -1,0 +1,291 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tessera.bio/schema/dataset-card.v0.2.json",
+  "title": "Tessera Bio Dataset Card v0.2",
+  "description": "Additive, backward-compatible extension of v0.1. v0.1 cards validate unchanged against v0.2 — every previously-required field remains required, and all newly-added fields are REQUIRED for v0.2 cards (optional only when validating a v0.1 card through the v0.2 lens). The headline addition is first-class multi-omic support via `modalities[]` and `cross_modal_join`, plus the `release_hash` field that pins a release as a content-addressable bundle.",
+  "type": "object",
+  "required": [
+    "dataset_id",
+    "dataset_version",
+    "release_date",
+    "producer",
+    "licence",
+    "cohort_definition",
+    "reference_versions",
+    "pipeline",
+    "inputs",
+    "quality",
+    "batch_effects",
+    "splits",
+    "normalisation",
+    "known_biases",
+    "suggested_uses",
+    "discouraged_uses",
+    "identifier_drift_report",
+    "provenance",
+    "modalities",
+    "cross_modal_join",
+    "release_hash",
+    "schema_version"
+  ],
+  "properties": {
+    "dataset_id": {
+      "type": "string",
+      "description": "Globally unique identifier, namespaced: tessera.<assay-or-multiomic>.<version>.<cohort>.<reference>",
+      "pattern": "^tessera\\."
+    },
+    "dataset_version": {
+      "type": "string",
+      "description": "Semantic version of this dataset",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "release_date": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO 8601 date"
+    },
+    "producer": {
+      "type": "string",
+      "description": "Producer organisation"
+    },
+    "licence": {
+      "type": "string",
+      "description": "Licence under which this dataset is released"
+    },
+    "cohort_definition": {
+      "type": "object",
+      "required": ["n_samples", "n_donors", "species", "tissue", "disease_focus", "selection_criteria"],
+      "properties": {
+        "n_samples": { "type": "integer", "minimum": 0 },
+        "n_donors": { "type": "integer", "minimum": 0 },
+        "species": { "type": "string" },
+        "tissue": { "type": "array", "items": { "type": "string" } },
+        "disease_focus": { "type": "string" },
+        "selection_criteria": { "type": "string" }
+      }
+    },
+    "reference_versions": {
+      "type": "object",
+      "required": ["ensembl_release", "ensembl_assembly", "uniprot_release", "gene_id_type", "transcript_id_type"],
+      "properties": {
+        "ensembl_release": { "type": "integer" },
+        "ensembl_assembly": { "type": "string" },
+        "uniprot_release": { "type": "string" },
+        "gene_id_type": { "type": "string" },
+        "transcript_id_type": { "type": "string" }
+      }
+    },
+    "pipeline": {
+      "type": "object",
+      "required": ["pipeline_name", "pipeline_version", "pipeline_url", "container_hash", "pipeline_commit", "workflow_lang", "tools"],
+      "properties": {
+        "pipeline_name": { "type": "string" },
+        "pipeline_version": { "type": "string" },
+        "pipeline_url": { "type": "string" },
+        "container_hash": { "type": "string" },
+        "pipeline_commit": { "type": "string" },
+        "workflow_lang": { "type": "string" },
+        "tools": { "type": "object", "additionalProperties": { "type": "string" } }
+      }
+    },
+    "inputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source_id", "source_url", "source_licence", "n_samples_taken", "submitters_acknowledgement"],
+        "properties": {
+          "source_id": { "type": "string" },
+          "source_url": { "type": "string", "format": "uri" },
+          "source_licence": { "type": "string" },
+          "n_samples_taken": { "type": "integer", "minimum": 0 },
+          "submitters_acknowledgement": { "type": "string" }
+        }
+      }
+    },
+    "quality": {
+      "type": "object",
+      "required": ["median_reads_per_sample", "median_mapping_rate", "median_duplication", "median_3_prime_bias", "failed_qc_samples", "qc_threshold"],
+      "properties": {
+        "median_reads_per_sample": { "type": "integer" },
+        "median_mapping_rate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "median_duplication": { "type": "number", "minimum": 0, "maximum": 1 },
+        "median_3_prime_bias": { "type": "number", "minimum": 0, "maximum": 1 },
+        "failed_qc_samples": { "type": "array", "items": { "type": "string" } },
+        "qc_threshold": { "type": "string" }
+      }
+    },
+    "batch_effects": {
+      "type": "object",
+      "required": ["detected", "correction_method", "before_correction_pca_explained_by_batch", "after_correction_pca_explained_by_batch"],
+      "properties": {
+        "detected": { "type": "boolean" },
+        "correction_method": { "type": "string" },
+        "before_correction_pca_explained_by_batch": { "type": "number" },
+        "after_correction_pca_explained_by_batch": { "type": "number" }
+      }
+    },
+    "splits": {
+      "type": "object",
+      "required": ["split_strategy", "train", "validation", "test", "leakage_controls"],
+      "properties": {
+        "split_strategy": { "type": "string" },
+        "train": {
+          "type": "object",
+          "required": ["n_samples", "cohort_ids"],
+          "properties": {
+            "n_samples": { "type": "integer" },
+            "cohort_ids": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "validation": {
+          "type": "object",
+          "required": ["n_samples", "cohort_ids"],
+          "properties": {
+            "n_samples": { "type": "integer" },
+            "cohort_ids": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "test": {
+          "type": "object",
+          "required": ["n_samples", "cohort_ids"],
+          "properties": {
+            "n_samples": { "type": "integer" },
+            "cohort_ids": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "leakage_controls": {
+          "type": "object",
+          "required": ["donor_overlap_check", "family_overlap_check"],
+          "properties": {
+            "donor_overlap_check": { "type": "string" },
+            "family_overlap_check": { "type": "string" }
+          }
+        }
+      }
+    },
+    "normalisation": {
+      "type": "object",
+      "required": ["method", "reference_distribution", "apply_to_test"],
+      "properties": {
+        "method": { "type": "string" },
+        "reference_distribution": { "type": "string" },
+        "apply_to_test": { "type": "string" }
+      }
+    },
+    "known_biases": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "suggested_uses": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "discouraged_uses": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "identifier_drift_report": {
+      "type": "object",
+      "required": ["compared_to_ensembl_release", "genes_added", "genes_removed", "genes_merged", "genes_split", "impact_on_dataset"],
+      "properties": {
+        "compared_to_ensembl_release": { "type": "integer" },
+        "genes_added": { "type": "integer" },
+        "genes_removed": { "type": "integer" },
+        "genes_merged": { "type": "integer" },
+        "genes_split": { "type": "integer" },
+        "impact_on_dataset": { "type": "string" }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["output_matrix_sha256", "dataset_card_sha256", "signed_by"],
+      "properties": {
+        "output_matrix_sha256": { "type": "string" },
+        "dataset_card_sha256": { "type": "string" },
+        "signed_by": { "type": "string" }
+      }
+    },
+    "schema_version": {
+      "type": "string",
+      "description": "Schema version this card validates against. v0.1 cards may omit this; v0.2 cards must set it to '0.2.0'.",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "modalities": {
+      "type": "array",
+      "description": "First-class list of modalities in this dataset. v0.1 (RNA-seq only) cards may declare a single-element array ['rna-seq']. v0.2 cards with more than one modality must also populate cross_modal_join.",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "assay_type", "n_features", "feature_id_type", "reference_release", "matrix_path", "normalisation"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Short name, e.g. 'rna-seq', 'proteomics', 'metabolomics'"
+          },
+          "assay_type": {
+            "type": "string",
+            "description": "Concrete assay, e.g. 'bulk-RNA-seq', 'DIA-MS', 'LC-MS-pos'"
+          },
+          "n_features": { "type": "integer", "minimum": 0 },
+          "feature_id_type": {
+            "type": "string",
+            "description": "Stable identifier type for the rows of this modality matrix"
+          },
+          "reference_release": {
+            "type": "string",
+            "description": "Pinned reference for this modality, e.g. 'Ensembl v110' or 'UniProt 2024_01' or 'CPTAC v3.2' or 'HMDB 5.1'"
+          },
+          "matrix_path": {
+            "type": "string",
+            "description": "Relative path inside the release bundle, e.g. 'modalities/rna-seq.parquet'"
+          },
+          "normalisation": {
+            "type": "object",
+            "required": ["method", "reference_distribution", "apply_to_test"],
+            "properties": {
+              "method": { "type": "string" },
+              "reference_distribution": { "type": "string" },
+              "apply_to_test": { "type": "string" }
+            }
+          },
+          "quality": {
+            "type": "object",
+            "description": "Modality-specific QC summary; mirrors the v0.1 quality block shape but adapted to the assay."
+          }
+        }
+      }
+    },
+    "cross_modal_join": {
+      "type": "object",
+      "description": "How modalities are joined for multi-omic training. For single-modality v0.2 cards, set join_type to 'single_modality' and leave the keys array with one entry.",
+      "required": ["join_type", "join_keys", "n_paired_samples", "per_donor_consistency_check"],
+      "properties": {
+        "join_type": {
+          "type": "string",
+          "enum": ["single_modality", "per_sample", "per_donor", "per_donor_timepoint"]
+        },
+        "join_keys": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Columns used to align rows across modalities, e.g. ['donor_id', 'sample_id']"
+        },
+        "n_paired_samples": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Samples with measurements in every modality. Drives the effective training-set size."
+        },
+        "per_donor_consistency_check": {
+          "type": "string",
+          "description": "Result of a leakage check that ensures donor IDs do not appear in different splits of the joined multi-omic matrix."
+        }
+      }
+    },
+    "release_hash": {
+      "type": "string",
+      "pattern": "^tessera-release:[0-9a-f]{12,64}$",
+      "description": "Content-addressable release hash. Computed as the SHA-256 of the canonical JSON manifest of all artefacts in the bundle (matrix parquets per modality, splits, dataset card itself, drift report, provenance manifest). First 12 hex chars are the human-readable release ID, like a git commit short hash. A v0.2 card MUST carry this — it is what makes a Tessera release a 'commit'."
+    }
+  },
+  "additionalProperties": false,
+  "$comment": "Schema version 0.2.0. Additive over v0.1 — no existing required field was removed or renamed. A v0.1 card validates against v0.2 if and only if the three new required fields (modalities, cross_modal_join, release_hash) and schema_version are added. Downstream users should pin to this schema version and validate against it. Migration tooling: `tessera migrate-card --from 0.1 --to 0.2 <card.yaml>` produces a v0.2 card with modalities=[rna-seq], cross_modal_join.join_type=single_modality, and a freshly-computed release_hash."
+}
