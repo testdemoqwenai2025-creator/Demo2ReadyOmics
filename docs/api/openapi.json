@@ -1,0 +1,36 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Tessera Bio / ReadyOmics API",
+    "version": "0.1.0",
+    "description": "REST API for browsing datasets, downloading matrices, requesting custom cohorts, and retrieving drift reports.",
+    "license": { "name": "Proprietary", "url": "https://testdemoqwenai2025-creator.github.io/Demo2ReadyOmics/terms/" }
+  },
+  "servers": [{ "url": "https://api.tessera.bio/v1", "description": "Production (planned)" }],
+  "paths": {
+    "/datasets": {
+      "get": { "summary": "List all available datasets", "tags": ["Datasets"], "security": [], "responses": { "200": { "description": "List of datasets" } } }
+    },
+    "/datasets/{id}": {
+      "get": { "summary": "Get a specific dataset card", "tags": ["Datasets"], "security": [], "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }], "responses": { "200": { "description": "Dataset card" }, "404": { "description": "Not found" } } }
+    },
+    "/datasets/{id}/matrix": {
+      "get": { "summary": "Download the Parquet expression matrix", "tags": ["Datasets"], "security": [{ "bearerAuth": [] }], "responses": { "200": { "description": "Parquet file" }, "403": { "description": "Pro subscription required" } } }
+    },
+    "/datasets/{id}/splits": {
+      "get": { "summary": "Download train/val/test splits", "tags": ["Datasets"], "security": [{ "bearerAuth": [] }], "responses": { "200": { "description": "ZIP file" } } }
+    },
+    "/datasets/custom": {
+      "post": { "summary": "Request a custom cohort build", "tags": ["Datasets"], "security": [{ "bearerAuth": [] }], "responses": { "202": { "description": "Build queued" } } }
+    },
+    "/drift-reports/{ensembl_version}": {
+      "get": { "summary": "Get identifier-drift report for an Ensembl release", "tags": ["Drift Reports"], "security": [{ "bearerAuth": [] }], "responses": { "200": { "description": "Drift report JSON" } } }
+    },
+    "/schema/dataset-card": {
+      "get": { "summary": "Get the JSON Schema for dataset cards", "tags": ["Schema"], "security": [], "responses": { "200": { "description": "JSON Schema" } } }
+    }
+  },
+  "components": {
+    "securitySchemes": { "bearerAuth": { "type": "http", "scheme": "bearer" } }
+  }
+}
