@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tessera.bio/schema/dataset-card.v0.4-extension.json",
+  "title": "Tessera Bio Dataset Card v0.4 extension (additive, optional)",
+  "description": "Additive extension to v0.3. This is NOT a full schema — it documents a single optional field (biofm_compatibility) added in v0.4. A v0.2 or v0.3 card validates unchanged against its own schema. Cards that populate this field declare their BioFM compatibility as metadata; Tessera does not run any BioFM in-platform.",
+  "type": "object",
+  "properties": {
+    "biofm_compatibility": {
+      "type": "object",
+      "description": "Optional. Documents which Bio foundation models (BioFMs) are known to consume this dataset's modality. Tessera asserts the compatibility as metadata — it does not validate by running the model. This field is non-proprietary and extensible: any BioFM framework (Helical, Hugging Face, direct) can be referenced. The downstream consumer (e.g., Helical) is responsible for actually running the model.",
+      "required": ["models"],
+      "properties": {
+        "models": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["name", "framework", "modality_match", "input_format", "perturbation_support"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "BioFM name and version, e.g., 'Geneformer vLARGE', 'scGPT v1', 'Tahoe-x1', 'ESM-2 t33 650M'."
+              },
+              "framework": {
+                "type": "string",
+                "description": "The framework that hosts the model. Currently: 'Helical' (the leading BioFM orchestration framework), 'Hugging Face', 'direct'."
+              },
+              "modality_match": {
+                "type": "string",
+                "enum": ["exact", "compatible", "approximate"],
+                "description": "How closely the dataset's modality matches the BioFM's expected input. 'exact' = direct consumption; 'compatible' = small transformation (e.g., pseudobulk aggregation); 'approximate' = significant transformation (e.g., Ensembl ID → gene symbol conversion)."
+              },
+              "input_format": {
+                "type": "string",
+                "description": "The expected input format, e.g., 'raw counts per cell (cells × genes)', 'ranked gene expression tokens per cell', 'protein sequences (FASTA)'."
+              },
+              "perturbation_support": {
+                "type": "boolean",
+                "description": "Whether the BioFM supports in-silico perturbation experiments (gene knockdown, over-expression). This is a property of the BioFM, not of the dataset."
+              },
+              "notes": {
+                "type": "string",
+                "description": "Free-text notes on the compatibility, e.g., 'requires gene-name conversion from Ensembl IDs to symbols via pinned Ensembl v110'."
+              }
+            }
+          }
+        },
+        "fine_tuning_protocol": {
+          "type": "string",
+          "description": "Recommended fine-tuning protocol, including which split to fine-tune on, which to evaluate on, and which pinned references to use."
+        },
+        "last_verified_against_release": {
+          "type": "string",
+          "description": "The BioFM framework release against which this compatibility was last verified, e.g., 'helical==0.7.2 (2026-09)'. When the framework releases a new version, this field flags that the compatibility may need re-verification — analogous to the identifier_drift_report for Ensembl releases."
+        }
+      }
+    }
+  },
+  "$comment": "v0.4 extension. This schema is intentionally minimal — it documents one optional field. v0.2 and v0.3 cards validate unchanged against their own schemas. Tessera cards that populate biofm_compatibility do so as metadata only; Tessera never runs the BioFM. The relationship between Tessera and BioFM frameworks (Helical specifically) is a substrate relationship: Helical consumes Tessera-pinned data; Helical outputs come back into Tessera as a new hash-pinned artefact type (planned for v0.5)."
+}
