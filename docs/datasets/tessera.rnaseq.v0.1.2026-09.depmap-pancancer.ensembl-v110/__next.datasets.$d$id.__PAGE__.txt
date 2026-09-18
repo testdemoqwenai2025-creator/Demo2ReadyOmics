@@ -1,6 +1,6 @@
 1:"$Sreact.fragment"
-2:I[32945,["/Demo2ReadyOmics/_next/static/chunks/9002d94f03357a25.js","/Demo2ReadyOmics/_next/static/chunks/67d8b461b84f4891.js","/Demo2ReadyOmics/_next/static/chunks/328fdbe5e7ba76aa.js","/Demo2ReadyOmics/_next/static/chunks/93b824bf4abf0ed6.js"],"DatasetDetailClient"]
+2:I[32945,["/Demo2ReadyOmics/_next/static/chunks/9002d94f03357a25.js","/Demo2ReadyOmics/_next/static/chunks/53223906fc7516a9.js","/Demo2ReadyOmics/_next/static/chunks/20edee7b28cf1021.js","/Demo2ReadyOmics/_next/static/chunks/fed7d2763e7541e5.js"],"DatasetDetailClient"]
 3:I[97367,["/Demo2ReadyOmics/_next/static/chunks/2f236954d6a65e12.js"],"OutletBoundary"]
 4:"$Sreact.suspense"
-0:{"buildId":"j19qbe08CuXsAsOh0O7dE","rsc":["$","$1","c",{"children":[["$","$L2",null,{"datasetId":"tessera.rnaseq.v0.1.2026-09.depmap-pancancer.ensembl-v110"}],[["$","script","script-0",{"src":"/Demo2ReadyOmics/_next/static/chunks/328fdbe5e7ba76aa.js","async":true}],["$","script","script-1",{"src":"/Demo2ReadyOmics/_next/static/chunks/93b824bf4abf0ed6.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"loading":null,"isPartial":false}
+0:{"buildId":"hi3UmX_In_Y-z35ExKFJe","rsc":["$","$1","c",{"children":[["$","$L2",null,{"datasetId":"tessera.rnaseq.v0.1.2026-09.depmap-pancancer.ensembl-v110"}],[["$","script","script-0",{"src":"/Demo2ReadyOmics/_next/static/chunks/20edee7b28cf1021.js","async":true}],["$","script","script-1",{"src":"/Demo2ReadyOmics/_next/static/chunks/fed7d2763e7541e5.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"loading":null,"isPartial":false}
 5:null
